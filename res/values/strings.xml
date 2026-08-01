@@ -144,6 +144,34 @@
     <!-- Title of a section of the customization picker where the user can customize app icon
      shape and theme for the home screen. [CHAR LIMIT=15] -->
     <string name="app_icons_title">Icons</string>
+    <!-- Title for the icon pack customization entry. [CHAR LIMIT=30] -->
+    <string name="icon_pack_title">Icon &amp; wallpaper pack</string>
+    <!-- Entry meaning no icon pack is applied and system icons are used. [CHAR LIMIT=50] -->
+    <string name="icon_pack_system">System icons</string>
+    <!-- Label shown next to the icon pack that is currently applied. [CHAR LIMIT=60] -->
+    <string name="icon_pack_selected_label"><xliff:g id="name" example="My Icons">%1$s</xliff:g> (applied)</string>
+    <!-- Button that imports an icon pack from an apk file. [CHAR LIMIT=50] -->
+    <string name="icon_pack_import">Import pack from file</string>
+    <!-- Section header above the list of installed icon packs. [CHAR LIMIT=50] -->
+    <string name="icon_pack_section_packs">Icon pack</string>
+    <!-- Section header above the wallpapers bundled in the applied pack. [CHAR LIMIT=50] -->
+    <string name="icon_pack_section_wallpapers">Wallpapers from this pack</string>
+    <!-- Message shown when an icon pack file could not be imported. [CHAR LIMIT=100] -->
+    <string name="icon_pack_import_failed">Couldn\'t import this file as an icon pack</string>
+    <!-- Message shown when an icon pack was imported. [CHAR LIMIT=100] -->
+    <string name="icon_pack_imported">Imported <xliff:g id="name" example="My Icons">%1$s</xliff:g></string>
+    <!-- Message shown after an icon pack was applied. [CHAR LIMIT=100] -->
+    <string name="icon_pack_applied">Icons updated</string>
+    <!-- Button that applies the selected icon pack. [CHAR LIMIT=30] -->
+    <string name="icon_pack_apply">Apply</string>
+    <!-- Entry that shows wallpapers bundled in an icon pack. [CHAR LIMIT=60] -->
+    <string name="icon_pack_wallpapers_of">Wallpapers from <xliff:g id="name" example="My Icons">%1$s</xliff:g></string>
+    <!-- Message shown when the selected pack contains no wallpapers. [CHAR LIMIT=100] -->
+    <string name="icon_pack_no_wallpapers">This pack has no wallpapers</string>
+    <!-- Message shown after a wallpaper from a pack was applied. [CHAR LIMIT=100] -->
+    <string name="icon_pack_wallpaper_applied">Wallpaper applied</string>
+    <!-- Message shown when a wallpaper from a pack could not be applied. [CHAR LIMIT=100] -->
+    <string name="icon_pack_wallpaper_failed">Couldn\'t apply this wallpaper</string>
 
     <!-- Description of a section of the customization picker where the user can configure app icon
         shape and theme, e.g. Circle, themed. [CHAR LIMIT=NONE] -->

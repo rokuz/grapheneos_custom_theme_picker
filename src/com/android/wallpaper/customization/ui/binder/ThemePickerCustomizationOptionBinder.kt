@@ -20,6 +20,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
+import com.android.customization.picker.iconpack.IconPackFloatingSheetBinder
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.provider.Settings
 import android.view.View
@@ -295,6 +297,11 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                 .first { it.first == ThemePickerHomeCustomizationOption.COLOR_CONTRAST }
                 .second
         optionColorContrast.setOnClickListener { navigateToColorContrastSettingsActivity.invoke() }
+
+        val optionIconPack: View =
+            homeScreenCustomizationOptionEntries
+                .first { it.first == ThemePickerHomeCustomizationOption.ICON_PACK }
+                .second
         val backgroundScope =
             CoroutineScope(Dispatchers.IO + Job() + CoroutineName(BACKGROUND_CONTEXT))
 
@@ -439,6 +446,12 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                                     }
                                 }
                         }
+                    }
+                }
+
+                launch {
+                    optionsViewModel.onCustomizeIconPackClicked.collect {
+                        optionIconPack.setOnClickListener { _ -> it?.invoke() }
                     }
                 }
 
@@ -744,6 +757,18 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
                 )
             }
 
+        customizationOptionFloatingSheetViewMap
+            ?.get(ThemePickerHomeCustomizationOption.ICON_PACK)
+            ?.let {
+                IconPackFloatingSheetBinder.bind(
+                    it,
+                    lifecycleOwner,
+                    optionsViewModel.selectedOption,
+                ) { staged ->
+                    optionsViewModel.stageIconPack(staged)
+                }
+            }
+
         customizationOptionFloatingSheetViewMap?.get(ThemePickerHomeCustomizationOption.GRID)?.let {
             GridFloatingSheetBinder.bind(
                 it,
@@ -924,5 +949,6 @@ constructor(private val defaultCustomizationOptionsBinder: DefaultCustomizationO
         private const val THUMBNAIL_CORNER_RADIUS = 18
         private const val DISABLE_TEXT_ALPHA = 0.38f
         private const val BACKGROUND_CONTEXT = "backgroundContext"
+        private const val TAG = "ThemePickerOptionBinder"
     }
 }

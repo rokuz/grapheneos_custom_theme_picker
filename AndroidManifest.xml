@@ -114,5 +114,11 @@
              </intent-filter>
         </activity-alias>
 
+        <activity
+            android:name="com.android.customization.picker.iconpack.IconPackImportActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+
     </application>
 </manifest>

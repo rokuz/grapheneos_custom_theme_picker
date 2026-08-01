@@ -22,6 +22,7 @@ import com.android.customization.packtheme.ui.viewmodel.PackThemeViewModel
 import com.android.customization.picker.clock.ui.viewmodel.ClockPickerViewModel
 import com.android.customization.picker.color.ui.viewmodel.ColorPickerViewModel
 import com.android.customization.picker.grid.ui.viewmodel.GridPickerViewModel
+import com.android.customization.picker.iconpack.IconPackClient
 import com.android.customization.picker.icon.ui.viewmodel.AppIconPickerViewModel
 import com.android.customization.picker.mode.ui.viewmodel.DarkModeViewModel
 import com.android.customization.picker.quickaffordance.ui.viewmodel.KeyguardQuickAffordancePickerViewModel2
@@ -31,6 +32,7 @@ import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptio
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.APP_ICONS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.COLORS
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.GRID
+import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerHomeCustomizationOption.ICON_PACK
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.CLOCK
 import com.android.wallpaper.customization.ui.util.ThemePickerCustomizationOptionUtil.ThemePickerLockCustomizationOption.SHORTCUTS
 import com.android.wallpaper.picker.common.preview.ui.viewmodel.WorkspacePreviewScreen
@@ -256,6 +258,15 @@ constructor(
             }
         }
 
+    val onCustomizeIconPackClicked: Flow<(() -> Unit)?> =
+        selectedOption.map {
+            if (it == null) {
+                { defaultCustomizationOptionsViewModel.selectOption(ICON_PACK) }
+            } else {
+                null
+            }
+        }
+
     val onCustomizeShapeGridClicked: Flow<(() -> Unit)?> =
         selectedOption.map {
             if (it == null) {
@@ -264,6 +275,25 @@ constructor(
                 null
             }
         }
+    private val stagedIconPack = MutableStateFlow<String?>(null)
+
+    /** Stages an icon pack file name to be applied by the toolbar apply button. */
+    fun stageIconPack(fileName: String?) {
+        stagedIconPack.value = fileName
+    }
+
+    val iconPackOnApply: Flow<(suspend () -> Unit)?> =
+        stagedIconPack.map { staged ->
+            if (staged == null) {
+                null
+            } else {
+                suspend {
+                    IconPackClient(appContext).selectPack(staged)
+                    stagedIconPack.value = null
+                }
+            }
+        }
+
     private val isApplyInProgress: MutableStateFlow<Boolean> = MutableStateFlow(false)
     @OptIn(ExperimentalCoroutinesApi::class)
     val onApplyButtonClicked: Flow<((onComplete: () -> Unit) -> Unit)?> =
@@ -273,6 +303,7 @@ constructor(
                     CLOCK -> clockPickerViewModel.onApply
                     SHORTCUTS -> keyguardQuickAffordancePickerViewModel2.onApply
                     GRID -> gridPickerViewModel.onApply
+                    ICON_PACK -> iconPackOnApply
                     APP_ICONS ->
                         if (BaseFlags.get(appContext).isExtendibleThemeManager()) {
                             appIconPickerViewModel.iconStyleAndShapeOnApply
